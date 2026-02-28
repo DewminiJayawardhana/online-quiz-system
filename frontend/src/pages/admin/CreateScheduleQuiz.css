@@ -1,0 +1,128 @@
+:root {
+  --bg: #F4F9FA;
+  --card: #E9FBFF;
+  --border: #C1E4E8;
+  --primary: #007B88;
+  --primary2: #2A9AAB;
+  --text: #06343A;
+  --muted: #2F4F55;
+  --white: #fff;
+}
+
+.cq-page {
+  min-height: 100vh;
+  background: linear-gradient(180deg, var(--bg), var(--card));
+  padding: 24px 14px;
+}
+
+.cq-container {
+  max-width: 980px;
+  margin: 0 auto;
+}
+
+.cq-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.cq-title {
+  margin: 0;
+  color: var(--text);
+}
+
+.cq-back {
+  border: 1px solid var(--border);
+  background: var(--white);
+  padding: 10px 12px;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.cq-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 16px;
+  box-shadow: 0 16px 45px rgba(0,0,0,0.08);
+}
+
+.cq-alert {
+  padding: 10px 12px;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  font-size: 13px;
+}
+
+.cq-alert-err {
+  background: #ffecec;
+  border: 1px solid #ffbaba;
+  color: #8a1f1f;
+}
+
+.cq-alert-ok {
+  background: #ecfff3;
+  border: 1px solid #a9f0c0;
+  color: #0f5a2f;
+}
+
+.cq-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+@media (max-width: 820px) {
+  .cq-grid { grid-template-columns: 1fr; }
+}
+
+.cq-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.cq-label {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.cq-input {
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  outline: none;
+}
+
+.cq-input:focus {
+  border-color: rgba(0,123,136,0.45);
+}
+
+.cq-help {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.cq-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 14px;
+}
+
+.cq-btn {
+  border: none;
+  color: var(--white);
+  font-weight: 700;
+  padding: 12px 16px;
+  border-radius: 12px;
+  cursor: pointer;
+  background: linear-gradient(90deg, var(--primary), var(--primary2));
+}
+
+.cq-note {
+  margin-top: 12px;
+  font-size: 13px;
+  color: var(--muted);
+}

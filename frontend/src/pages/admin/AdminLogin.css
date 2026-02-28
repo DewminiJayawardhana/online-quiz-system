@@ -1,0 +1,62 @@
+:root {
+  --bg: #F4F9FA;
+  --card: #E9FBFF;
+  --border: #C1E4E8;
+  --primary: #007B88;
+  --primary2: #2A9AAB;
+  --text: #06343A;
+  --muted: #2F4F55;
+  --white: #fff;
+}
+
+.al-page {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 18px;
+  background: linear-gradient(180deg, var(--bg), var(--card));
+}
+
+.al-card {
+  width: min(420px, 100%);
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 18px;
+  box-shadow: 0 16px 45px rgba(0,0,0,0.10);
+}
+
+.al-title { margin: 0; color: var(--text); font-size: 24px; }
+.al-sub { margin: 6px 0 16px; color: var(--muted); font-size: 13.5px; }
+
+.al-label { display:block; margin: 10px 0 6px; color: var(--muted); font-size: 13px; }
+.al-input {
+  width: 100%;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  outline: none;
+}
+.al-input:focus { border-color: rgba(0,123,136,0.5); }
+
+.al-btn {
+  margin-top: 14px;
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 12px;
+  color: var(--white);
+  cursor: pointer;
+  font-weight: 700;
+  background: linear-gradient(90deg, var(--primary), var(--primary2));
+}
+
+.al-error {
+  background: #ffecec;
+  border: 1px solid #ffbaba;
+  color: #8a1f1f;
+  padding: 10px;
+  border-radius: 12px;
+  margin: 10px 0;
+  font-size: 13px;
+}
