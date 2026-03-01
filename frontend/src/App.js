@@ -2,8 +2,15 @@ import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Home from "./pages/Home";
+import Login from "./pages/Login";
+
+import StudentRegister from "./pages/student/StudentRegister";
+import StudentHome from "./pages/student/StudentHome";
+import StudentQuizPlay from "./pages/student/StudentQuizPlay";
+
 import AdminLogin from "./pages/admin/AdminLogin";
 import AdminDashboard from "./pages/admin/AdminDashboard";
+
 import ProtectedAdminRoute from "./components/ProtectedAdminRoute";
 import RoleProtectedAdminRoute from "./components/RoleProtectedAdminRoute";
 
@@ -13,19 +20,27 @@ import ScheduledQuizDetails from "./pages/admin/ScheduledQuizDetails";
 
 import ManageDraftQuizzes from "./pages/admin/ManageDraftQuizzes";
 import DraftQuizDetails from "./pages/admin/DraftQuizDetails";
-import FinalizedQuizzes from "./pages/admin/FinalizedQuizzes";
+
+import FinalizeQuizzes from "./pages/admin/FinalizeQuizzes";
+import FinalizeQuizDetails from "./pages/admin/FinalizeQuizDetails";
 
 export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Home Page */}
+        {/* Home + Auth */}
         <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
 
-        {/* Admin Login */}
+        {/* Student */}
+        <Route path="/student/register" element={<StudentRegister />} />
+        <Route path="/student" element={<StudentHome />} />
+        <Route path="/student/quizzes/:id" element={<StudentQuizPlay />} />
+
+        {/* Admin Login (optional separate route) */}
         <Route path="/admin/login" element={<AdminLogin />} />
 
-        {/* Protected Dashboard */}
+        {/* Admin Dashboard (any admin) */}
         <Route
           path="/admin/dashboard"
           element={
@@ -54,7 +69,6 @@ export default function App() {
             </RoleProtectedAdminRoute>
           }
         />
-
         <Route
           path="/admin/quizzes/scheduled/:id"
           element={
@@ -73,7 +87,6 @@ export default function App() {
             </RoleProtectedAdminRoute>
           }
         />
-
         <Route
           path="/admin/quizzes/drafts/:id"
           element={
@@ -83,17 +96,25 @@ export default function App() {
           }
         />
 
-        {/* Finalized Quizzes (READY) */}
+        {/* Finalize Section (MAIN ADMIN only) */}
         <Route
           path="/admin/quizzes/finalized"
           element={
-            <RoleProtectedAdminRoute allowedRoles={["SCHEDULE_ADMIN", "QUIZ_ADMIN"]}>
-              <FinalizedQuizzes />
+            <RoleProtectedAdminRoute allowedRoles={["MAIN_ADMIN"]}>
+              <FinalizeQuizzes />
+            </RoleProtectedAdminRoute>
+          }
+        />
+        <Route
+          path="/admin/quizzes/finalize/:id"
+          element={
+            <RoleProtectedAdminRoute allowedRoles={["MAIN_ADMIN"]}>
+              <FinalizeQuizDetails />
             </RoleProtectedAdminRoute>
           }
         />
 
-        {/* 404 Page */}
+        {/* 404 */}
         <Route path="*" element={<div style={{ padding: 24 }}>404 - Page Not Found</div>} />
       </Routes>
     </BrowserRouter>

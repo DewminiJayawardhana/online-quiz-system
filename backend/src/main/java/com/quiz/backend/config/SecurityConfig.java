@@ -16,8 +16,6 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    // For now: we only protect by JWT later.
-    // Here we allow all endpoints; frontend will use JWT, and later we add JWT filter.
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
@@ -25,8 +23,11 @@ public class SecurityConfig {
           .cors(Customizer.withDefaults())
           .authorizeHttpRequests(auth -> auth
               .requestMatchers("/api/admin-auth/**").permitAll()
+              .requestMatchers("/api/student-auth/**").permitAll()     // ✅ add this
+              .requestMatchers("/api/student/quizzes/**").permitAll()  // ✅ add this
               .anyRequest().permitAll()
           );
+
         return http.build();
     }
 }

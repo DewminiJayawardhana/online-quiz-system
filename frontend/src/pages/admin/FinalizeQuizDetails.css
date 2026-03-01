@@ -1,0 +1,30 @@
+:root{--bg:#F4F9FA;--card:#E9FBFF;--border:#C1E4E8;--primary:#007B88;--primary2:#2A9AAB;--text:#06343A;--muted:#2F4F55;--white:#fff;}
+.fzd-page{min-height:100vh;background:linear-gradient(180deg,var(--bg),var(--card));padding:24px 14px;}
+.fzd-container{max-width:1050px;margin:0 auto;}
+.fzd-top{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px;}
+.fzd-title{margin:0;color:var(--text);}
+.fzd-back{border:1px solid var(--border);background:var(--white);padding:10px 12px;border-radius:12px;cursor:pointer;}
+.fzd-card{background:var(--white);border:1px solid var(--border);border-radius:18px;padding:16px;box-shadow:0 16px 45px rgba(0,0,0,0.08);}
+.fzd-head{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;}
+@media(max-width:900px){.fzd-head{grid-template-columns:1fr;}}
+.lbl{font-size:12px;color:var(--muted);font-weight:800;}
+.val{font-weight:900;color:var(--text);margin-top:4px;}
+.fzd-metaGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:12px;color:var(--text);}
+@media(max-width:900px){.fzd-metaGrid{grid-template-columns:1fr;}}
+.fzd-sectionTitle{margin-top:16px;font-weight:900;color:var(--text);}
+.fzd-q{margin-top:12px;border:1px solid var(--border);border-radius:14px;padding:12px;background:rgba(233,251,255,0.35);}
+.fzd-qTitle{font-weight:900;color:var(--text);}
+.fzd-opts{margin:8px 0 0 20px;color:var(--muted);}
+.fzd-opts li.correct{font-weight:900;color:#0f5a2f;}
+.fzd-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:12px;flex-wrap:wrap;}
+.btn{border:none;color:#fff;font-weight:900;padding:12px 14px;border-radius:12px;cursor:pointer;background:linear-gradient(90deg,var(--primary),var(--primary2));}
+.btn.publish{background:linear-gradient(90deg,#166534,#22c55e);}
+.fzd-err{background:#ffecec;border:1px solid #ffbaba;color:#8a1f1f;padding:10px;border-radius:12px;margin:10px 0;}
+.fzd-ok{background:#ecfff3;border:1px solid #a9f0c0;color:#0f5a2f;padding:10px;border-radius:12px;margin:10px 0;}
+.fzd-empty{color:var(--muted);padding:12px;border:1px dashed var(--border);border-radius:12px;background:rgba(255,255,255,0.6);}
+
+@media print{
+  .no-print{display:none !important;}
+  .fzd-page{padding:0;background:#fff;}
+  .fzd-card{box-shadow:none;border:none;}
+}
