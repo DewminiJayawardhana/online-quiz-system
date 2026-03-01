@@ -7,6 +7,10 @@ import AdminDashboard from "./pages/admin/AdminDashboard";
 import ProtectedAdminRoute from "./components/ProtectedAdminRoute";
 import CreateScheduleQuiz from "./pages/admin/CreateScheduleQuiz";
 import RoleProtectedAdminRoute from "./components/RoleProtectedAdminRoute";
+
+import ManageScheduledQuizzes from "./pages/admin/ManageScheduledQuizzes";
+import ScheduledQuizDetails from "./pages/admin/ScheduledQuizDetails";
+
 // Temporary placeholder pages
 const Placeholder = ({ title }) => (
   <div style={{ padding: 24 }}>
@@ -47,13 +51,22 @@ export default function App() {
 />
 
         <Route
-          path="/admin/quizzes/scheduled"
-          element={
-            <ProtectedAdminRoute>
-              <Placeholder title="Manage Scheduled Quizzes (Add Questions)" />
-            </ProtectedAdminRoute>
-          }
-        />
+  path="/admin/quizzes/scheduled"
+  element={
+    <RoleProtectedAdminRoute allowedRoles={["SCHEDULE_ADMIN", "QUIZ_ADMIN"]}>
+      <ManageScheduledQuizzes />
+    </RoleProtectedAdminRoute>
+  }
+/>
+
+<Route
+  path="/admin/quizzes/scheduled/:id"
+  element={
+    <RoleProtectedAdminRoute allowedRoles={["SCHEDULE_ADMIN", "QUIZ_ADMIN"]}>
+      <ScheduledQuizDetails />
+    </RoleProtectedAdminRoute>
+  }
+/>
 
         <Route
           path="/admin/quizzes/drafts"

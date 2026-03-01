@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./CreateScheduleQuiz.css";
+import { api } from "../../api/api"; // ✅ ADD THIS (your axios instance)
 
 // ✅ Show next quiz number WITHOUT increasing counter
 function generateQuizNumber() {
@@ -14,7 +15,7 @@ function generateQuizNumber() {
   return `OQS-${year}-${month}-${nextNumber}`;
 }
 
-// ✅ Increase counter ONLY after submit
+// ✅ Increase counter ONLY after submit success
 function commitQuizNumber() {
   const last = localStorage.getItem("oqs_last_quiz_no");
   const nextNumber = last ? Number(last) + 1 : 1;
@@ -48,6 +49,7 @@ export default function CreateScheduleQuiz() {
 
   const [err, setErr] = useState("");
   const [ok, setOk] = useState("");
+  const [saving, setSaving] = useState(false); // ✅ prevent double submit
 
   useEffect(() => {
     setQuizNo(generateQuizNumber());
@@ -88,7 +90,7 @@ export default function CreateScheduleQuiz() {
     endAt,
   ]);
 
-  const submit = (e) => {
+  const submit = async (e) => {
     e.preventDefault();
     setErr("");
     setOk("");
@@ -105,22 +107,34 @@ export default function CreateScheduleQuiz() {
       noOfQuestions: Number(noOfQuestions),
       totalMarks: Number(totalMarks),
       passingMark: Number(passingMark),
-      startAt,
-      endAt,
+      // ✅ send as ISO so Spring can Instant.parse(...)
+      startAt: new Date(startAt).toISOString(),
+      endAt: new Date(endAt).toISOString(),
       status: "SCHEDULED",
     };
 
-    console.log("QUIZ CREATE PAYLOAD:", payload);
+    try {
+      setSaving(true);
 
-    // ✅ Increase quiz counter ONLY after submit success
-    commitQuizNumber();
+      // ✅ SAVE TO BACKEND (MongoDB)
+      await api.post("/api/quizzes", payload, {
+        headers: {
+          "X-Admin-Email": localStorage.getItem("oqs_admin_email") || "",
+        },
+      });
 
-    // ✅ Prepare next quiz number immediately (so next time it increments)
-    setQuizNo(generateQuizNumber());
+      // ✅ Increase quiz counter ONLY after API success
+      commitQuizNumber();
 
-    setOk(
-      "Quiz details saved (frontend). Next: connect backend API to store in MongoDB."
-    );
+      // ✅ Prepare next quiz number
+      setQuizNo(generateQuizNumber());
+
+      setOk("Quiz scheduled successfully and added to Manage Scheduled Quizzes.");
+    } catch (e2) {
+      setErr(e2?.response?.data?.message || "Failed to save quiz");
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (
@@ -232,8 +246,8 @@ export default function CreateScheduleQuiz() {
           </div>
 
           <div className="cq-actions">
-            <button className="cq-btn" type="submit">
-              Save Quiz Schedule
+            <button className="cq-btn" type="submit" disabled={saving}>
+              {saving ? "Saving..." : "Save Quiz Schedule"}
             </button>
           </div>
         </form>
