@@ -1,0 +1,22 @@
+:root{--border:#C1E4E8;--primary:#007B88;--primary2:#2A9AAB;--text:#06343A;--muted:#2F4F55;--white:#fff;}
+.aqm-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.35);display:flex;align-items:center;justify-content:center;padding:14px;z-index:50;}
+.aqm-modal{width:min(760px,100%);background:var(--white);border:1px solid var(--border);border-radius:18px;padding:14px;box-shadow:0 22px 60px rgba(0,0,0,0.22);}
+.aqm-top{display:flex;justify-content:space-between;align-items:center;gap:12px;}
+.aqm-title{margin:0;color:var(--text);}
+.aqm-x{border:1px solid var(--border);background:var(--white);border-radius:10px;padding:6px 10px;cursor:pointer;}
+.aqm-field{margin-top:12px;}
+.lbl{font-size:12px;color:var(--muted);display:block;margin-bottom:6px;font-weight:800;}
+.ta{width:100%;border:1px solid var(--border);border-radius:12px;padding:10px;outline:none;resize:vertical;}
+.inp{width:100%;border:1px solid var(--border);border-radius:12px;padding:10px;outline:none;}
+.aqm-optsTop{display:flex;justify-content:space-between;align-items:center;margin-top:12px;gap:10px;flex-wrap:wrap;}
+.aqm-sub{font-weight:900;color:var(--text);}
+.aqm-addOpt{border:1px solid var(--border);background:var(--white);padding:10px 12px;border-radius:999px;cursor:pointer;}
+.aqm-options{display:flex;flex-direction:column;gap:10px;margin-top:10px;}
+.aqm-opt{display:flex;align-items:center;gap:10px;}
+.optInp{flex:1;border:1px solid var(--border);border-radius:12px;padding:10px;outline:none;}
+.rm{border:1px solid var(--border);background:var(--white);border-radius:10px;padding:8px 10px;cursor:pointer;}
+.aqm-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:14px;flex-wrap:wrap;}
+.btn{border:none;color:#fff;font-weight:900;padding:12px 14px;border-radius:12px;cursor:pointer;background:linear-gradient(90deg,var(--primary),var(--primary2));}
+.btn2{border:1px solid var(--border);background:var(--white);padding:12px 14px;border-radius:12px;cursor:pointer;font-weight:900;color:var(--text);}
+.aqm-err{background:#ffecec;border:1px solid #ffbaba;color:#8a1f1f;padding:10px;border-radius:12px;margin-top:10px;}
+.aqm-note{margin-top:10px;color:var(--muted);font-size:13px;}

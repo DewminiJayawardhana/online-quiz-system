@@ -5,25 +5,20 @@ import Home from "./pages/Home";
 import AdminLogin from "./pages/admin/AdminLogin";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import ProtectedAdminRoute from "./components/ProtectedAdminRoute";
-import CreateScheduleQuiz from "./pages/admin/CreateScheduleQuiz";
 import RoleProtectedAdminRoute from "./components/RoleProtectedAdminRoute";
 
+import CreateScheduleQuiz from "./pages/admin/CreateScheduleQuiz";
 import ManageScheduledQuizzes from "./pages/admin/ManageScheduledQuizzes";
 import ScheduledQuizDetails from "./pages/admin/ScheduledQuizDetails";
 
-// Temporary placeholder pages
-const Placeholder = ({ title }) => (
-  <div style={{ padding: 24 }}>
-    <h2>{title}</h2>
-    <p>This page will be built next.</p>
-  </div>
-);
+import ManageDraftQuizzes from "./pages/admin/ManageDraftQuizzes";
+import DraftQuizDetails from "./pages/admin/DraftQuizDetails";
+import FinalizedQuizzes from "./pages/admin/FinalizedQuizzes";
 
 export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-
         {/* Home Page */}
         <Route path="/" element={<Home />} />
 
@@ -40,58 +35,66 @@ export default function App() {
           }
         />
 
-        {/* Quiz Sections */}
+        {/* Create Quiz (Schedule Admin only) */}
         <Route
-  path="/admin/quizzes/create"
-  element={
-    <RoleProtectedAdminRoute allowedRoles={["SCHEDULE_ADMIN"]}>
-      <CreateScheduleQuiz />
-    </RoleProtectedAdminRoute>
-  }
-/>
-
-        <Route
-  path="/admin/quizzes/scheduled"
-  element={
-    <RoleProtectedAdminRoute allowedRoles={["SCHEDULE_ADMIN", "QUIZ_ADMIN"]}>
-      <ManageScheduledQuizzes />
-    </RoleProtectedAdminRoute>
-  }
-/>
-
-<Route
-  path="/admin/quizzes/scheduled/:id"
-  element={
-    <RoleProtectedAdminRoute allowedRoles={["SCHEDULE_ADMIN", "QUIZ_ADMIN"]}>
-      <ScheduledQuizDetails />
-    </RoleProtectedAdminRoute>
-  }
-/>
-
-        <Route
-          path="/admin/quizzes/drafts"
+          path="/admin/quizzes/create"
           element={
-            <ProtectedAdminRoute>
-              <Placeholder title="Manage Draft Quizzes" />
-            </ProtectedAdminRoute>
+            <RoleProtectedAdminRoute allowedRoles={["SCHEDULE_ADMIN"]}>
+              <CreateScheduleQuiz />
+            </RoleProtectedAdminRoute>
+          }
+        />
+
+        {/* Scheduled Quizzes (Schedule Admin + Quiz Admin) */}
+        <Route
+          path="/admin/quizzes/scheduled"
+          element={
+            <RoleProtectedAdminRoute allowedRoles={["SCHEDULE_ADMIN", "QUIZ_ADMIN"]}>
+              <ManageScheduledQuizzes />
+            </RoleProtectedAdminRoute>
           }
         />
 
         <Route
+          path="/admin/quizzes/scheduled/:id"
+          element={
+            <RoleProtectedAdminRoute allowedRoles={["SCHEDULE_ADMIN", "QUIZ_ADMIN"]}>
+              <ScheduledQuizDetails />
+            </RoleProtectedAdminRoute>
+          }
+        />
+
+        {/* Draft Quizzes (Schedule Admin + Quiz Admin) */}
+        <Route
+          path="/admin/quizzes/drafts"
+          element={
+            <RoleProtectedAdminRoute allowedRoles={["SCHEDULE_ADMIN", "QUIZ_ADMIN"]}>
+              <ManageDraftQuizzes />
+            </RoleProtectedAdminRoute>
+          }
+        />
+
+        <Route
+          path="/admin/quizzes/drafts/:id"
+          element={
+            <RoleProtectedAdminRoute allowedRoles={["SCHEDULE_ADMIN", "QUIZ_ADMIN"]}>
+              <DraftQuizDetails />
+            </RoleProtectedAdminRoute>
+          }
+        />
+
+        {/* Finalized Quizzes (READY) */}
+        <Route
           path="/admin/quizzes/finalized"
           element={
-            <ProtectedAdminRoute>
-              <Placeholder title="Finalized Quizzes – Ready for Submission" />
-            </ProtectedAdminRoute>
+            <RoleProtectedAdminRoute allowedRoles={["SCHEDULE_ADMIN", "QUIZ_ADMIN"]}>
+              <FinalizedQuizzes />
+            </RoleProtectedAdminRoute>
           }
         />
 
         {/* 404 Page */}
-        <Route
-          path="*"
-          element={<div style={{ padding: 24 }}>404 - Page Not Found</div>}
-        />
-
+        <Route path="*" element={<div style={{ padding: 24 }}>404 - Page Not Found</div>} />
       </Routes>
     </BrowserRouter>
   );
