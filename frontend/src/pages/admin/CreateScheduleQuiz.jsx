@@ -23,7 +23,6 @@ function commitQuizNumber() {
 }
 
 const CATEGORIES = [
-  "Programming",
   "Data Structures",
   "Algorithms",
   "Databases",

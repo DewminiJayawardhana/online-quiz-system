@@ -108,4 +108,57 @@ public class StudentQuizController {
 
         return ResponseEntity.ok(out);
     }
+    // ... කලින් තිබුණු import සහ code එක ...
+
+@PostMapping("/{quizId}/submit")
+public ResponseEntity<?> submitQuiz(@PathVariable String quizId, @RequestBody Map<String, String> studentAnswers) {
+    // studentAnswers ලැබෙන්නේ මෙහෙමයි: { "questionId": "තෝරාගත්ත උත්තරයේ Text එක" }
+
+    Quiz quiz = quizRepo.findById(quizId).orElse(null);
+    if (quiz == null) return ResponseEntity.status(404).body(Map.of("message", "Quiz not found"));
+
+    List<Question> questions = questionRepo.findByQuizIdOrderByCreatedAtAsc(quizId);
+    
+    int score = 0;
+    int correctCount = 0;
+    int totalMarks = 0;
+
+    // ප්‍රශ්නයෙන් ප්‍රශ්නයට ගොස් උත්තර පරීක්ෂා කිරීම
+    Map<String, String> correctAnswersMap = new HashMap<>();
+
+    for (Question q : questions) {
+        totalMarks += q.getMarks();
+        
+        // Database එකේ තියෙන නිවැරදි option එකේ Text එක හොයාගන්නවා
+        String correctText = "";
+        if (q.getOptions() != null) {
+            for (Object optObj : q.getOptions()) {
+                // මෙතනදී QuestionOption class එකට cast කරලා බලනවා
+                if (optObj instanceof com.quiz.backend.model.QuestionOption opt) {
+                    if (opt.isCorrect()) {
+                        correctText = opt.getText();
+                    }
+                }
+            }
+        }
+        
+        correctAnswersMap.put(q.getId(), correctText);
+
+        String submittedText = studentAnswers.get(q.getId());
+        if (submittedText != null && submittedText.equals(correctText)) {
+            score += q.getMarks();
+            correctCount++;
+        }
+    }
+
+    // ප්‍රතිඵලය සකස් කිරීම
+    Map<String, Object> result = new LinkedHashMap<>();
+    result.put("score", score);
+    result.put("total", totalMarks);
+    result.put("correctCount", correctCount);
+    result.put("passed", score >= quiz.getPassingMark());
+    result.put("correctMap", correctAnswersMap); // පසුව ශිෂ්‍යයාට නිවැරදි උත්තර පෙන්වීමට
+
+    return ResponseEntity.ok(result);
+}
 }
