@@ -3,9 +3,12 @@ import { useParams, useNavigate } from "react-router-dom";
 import { api } from "../../api/api";
 import "./StudentQuizPlay.css";
 
-const attemptKey = (quizId) => `oqs_attempt_${quizId}`;
-const attemptsListKey = "oqs_attempts_list";
-const startKey = (quizId) => `oqs_quiz_start_${quizId}`;
+// ✅ Email-based keys
+const getStudentEmail = () => localStorage.getItem("oqs_student_email") || "guest";
+
+const attemptKey = (quizId) => `oqs_${getStudentEmail()}_attempt_${quizId}`;
+const attemptsListKey = () => `oqs_${getStudentEmail()}_attempts_list`;
+const startKey = (quizId) => `oqs_${getStudentEmail()}_quiz_start_${quizId}`;
 
 const pad2 = (n) => String(n).padStart(2, "0");
 const formatTime = (sec) => {
@@ -18,6 +21,7 @@ const formatTime = (sec) => {
 export default function StudentQuizPlay() {
   const { id: quizId } = useParams();
   const nav = useNavigate();
+  const email = getStudentEmail();
 
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState("");
@@ -25,11 +29,11 @@ export default function StudentQuizPlay() {
   const [quiz, setQuiz] = useState(null);
   const [questions, setQuestions] = useState([]);
 
-  const [answers, setAnswers] = useState({}); // {questionId: selectedIndex}
+  const [answers, setAnswers] = useState({});
   const [submitted, setSubmitted] = useState(false);
 
-  const [result, setResult] = useState(null); 
-  const [correctMap, setCorrectMap] = useState({}); // {questionId: correctIndex}
+  const [result, setResult] = useState(null);
+  const [correctMap, setCorrectMap] = useState({});
 
   const [secondsLeft, setSecondsLeft] = useState(0);
   const timerRef = useRef(null);
@@ -38,6 +42,8 @@ export default function StudentQuizPlay() {
     const load = async () => {
       try {
         setLoading(true);
+        setErr("");
+
         const res = await api.get(`/api/student/quizzes/${quizId}`);
         const qz = res.data.quiz;
         const qs = res.data.questions || [];
@@ -45,6 +51,7 @@ export default function StudentQuizPlay() {
         setQuiz(qz);
         setQuestions(qs);
 
+        // ✅ load saved attempt only for this email
         const saved = localStorage.getItem(attemptKey(quizId));
         if (saved) {
           const attempt = JSON.parse(saved);
@@ -57,6 +64,7 @@ export default function StudentQuizPlay() {
         }
 
         const limitSeconds = Math.max(1, Number(qz?.timeLimitMinutes || 0) * 60);
+
         let startIso = localStorage.getItem(startKey(quizId));
         if (!startIso) {
           startIso = new Date().toISOString();
@@ -74,15 +82,19 @@ export default function StudentQuizPlay() {
         setLoading(false);
       }
     };
+
     load();
-  }, [quizId]);
+  }, [quizId, email]);
 
   useEffect(() => {
     if (submitted || !quiz) return;
+
     if (timerRef.current) clearInterval(timerRef.current);
+
     timerRef.current = setInterval(() => {
       setSecondsLeft((prev) => Math.max(0, prev - 1));
     }, 1000);
+
     return () => clearInterval(timerRef.current);
   }, [submitted, quiz]);
 
@@ -90,11 +102,12 @@ export default function StudentQuizPlay() {
     if (!submitted && quiz && secondsLeft === 0 && questions.length > 0) {
       doSubmit(true);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [secondsLeft, submitted, quiz, questions.length]);
 
   const missingCount = useMemo(() => {
     if (!questions?.length) return 0;
-    return questions.filter(q => answers[q.id] === undefined).length;
+    return questions.filter((q) => answers[q.id] === undefined).length;
   }, [questions, answers]);
 
   const select = (qId, index) => {
@@ -102,7 +115,6 @@ export default function StudentQuizPlay() {
     setAnswers((prev) => ({ ...prev, [qId]: index }));
   };
 
-  // ✅ මොන උත්තරයද තේරුවේ කියලා Backend එකට යවන function එක
   const doSubmit = async (auto = false) => {
     if (submitted) return;
 
@@ -111,32 +123,36 @@ export default function StudentQuizPlay() {
       return;
     }
 
-    // Backend එක බලාපොරොත්තු වන format එකට data සකස් කිරීම { qId: "Option Text" }
     const submissionData = {};
-    questions.forEach(q => {
+    questions.forEach((q) => {
       const selectedIdx = answers[q.id];
-      const options = (q.options || []).map(op => typeof op === "string" ? op : op?.text);
-      submissionData[q.id] = selectedIdx !== undefined ? options[selectedIdx] : null;
+      const options = (q.options || []).map((op) =>
+        typeof op === "string" ? op : op?.text
+      );
+      submissionData[q.id] =
+        selectedIdx !== undefined ? options[selectedIdx] : null;
     });
 
     try {
       setLoading(true);
-      const res = await api.post(`/api/student/quizzes/${quizId}/submit`, submissionData);
-      const serverResult = res.data; // {score, total, correctCount, passed, correctMap}
 
-      // Backend එකෙන් එන Text-based map එක UI එකට පහසු Index-based map එකකට හරවනවා
+      const res = await api.post(`/api/student/quizzes/${quizId}/submit`, submissionData);
+      const serverResult = res.data;
+
       const cmIdx = {};
-      questions.forEach(q => {
-        const options = (q.options || []).map(op => typeof op === "string" ? op : op?.text);
-        const correctText = serverResult.correctMap[q.id];
+      questions.forEach((q) => {
+        const options = (q.options || []).map((op) =>
+          typeof op === "string" ? op : op?.text
+        );
+        const correctText = serverResult.correctMap?.[q.id];
         cmIdx[q.id] = options.indexOf(correctText);
       });
 
-      const resObj = { 
-        score: serverResult.score, 
-        total: serverResult.total, 
-        correctCount: serverResult.correctCount, 
-        passed: serverResult.passed 
+      const resObj = {
+        score: serverResult.score,
+        total: serverResult.total,
+        correctCount: serverResult.correctCount,
+        passed: serverResult.passed,
       };
 
       setSubmitted(true);
@@ -156,13 +172,19 @@ export default function StudentQuizPlay() {
         result: resObj,
         correctMap: cmIdx,
       };
+
+      // ✅ save single attempt with email-based key
       localStorage.setItem(attemptKey(quizId), JSON.stringify(attemptData));
 
-      const prev = JSON.parse(localStorage.getItem(attemptsListKey) || "[]");
-      localStorage.setItem(attemptsListKey, JSON.stringify([...prev.filter(a => a.quizId !== quizId), attemptData]));
-
+      // ✅ save attempts list with email-based key
+      const listKey = attemptsListKey();
+      const prev = JSON.parse(localStorage.getItem(listKey) || "[]");
+      localStorage.setItem(
+        listKey,
+        JSON.stringify([...prev.filter((a) => a.quizId !== quizId), attemptData])
+      );
     } catch (e) {
-      alert("Submission failed. Check your connection.");
+      alert(e?.response?.data?.message || "Submission failed. Check your connection.");
     } finally {
       setLoading(false);
     }
@@ -175,10 +197,15 @@ export default function StudentQuizPlay() {
     <div className="sq-page">
       <div className="sq-wrap">
         <div className="sq-topbar">
-          <button className="sq-back" onClick={() => nav("/student")}>← Back</button>
+          <button className="sq-back" onClick={() => nav("/student")}>
+            ← Back
+          </button>
+
           <div className="sq-titleBox">
             <div className="sq-title">{quiz?.quizNo}</div>
-            <div className="sq-sub">{quiz?.category} • {quiz?.timeLimitMinutes} min</div>
+            <div className="sq-sub">
+              {quiz?.category} • {quiz?.timeLimitMinutes} min
+            </div>
           </div>
 
           {!submitted ? (
@@ -195,8 +222,12 @@ export default function StudentQuizPlay() {
         {submitted && (
           <div className="sq-card result-summary">
             <h3>🎉 Result Summary</h3>
-            <p>Score: <b>{result?.score}</b> / {result?.total}</p>
-            <p>Correct Questions: <b>{result?.correctCount}</b> / {questions.length}</p>
+            <p>
+              Score: <b>{result?.score}</b> / {result?.total}
+            </p>
+            <p>
+              Correct Questions: <b>{result?.correctCount}</b> / {questions.length}
+            </p>
           </div>
         )}
 
@@ -204,7 +235,9 @@ export default function StudentQuizPlay() {
           {questions.map((q, idx) => {
             const selected = answers[q.id];
             const correctIndex = correctMap[q.id];
-            const options = (q.options || []).map(op => typeof op === "string" ? op : op?.text);
+            const options = (q.options || []).map((op) =>
+              typeof op === "string" ? op : op?.text
+            );
 
             return (
               <div key={q.id} className="sq-q">
@@ -212,16 +245,24 @@ export default function StudentQuizPlay() {
                   <span className="sq-qNo">{idx + 1}</span>
                   <p className="sq-qText">{q.text}</p>
                 </div>
+
                 <div className="sq-opts">
                   {options.map((optText, i) => {
                     const isSelected = selected === i;
                     const isCorrect = submitted && correctIndex === i;
                     const isWrong = submitted && isSelected && correctIndex !== i;
 
-                    const cls = `sq-opt ${isSelected ? "selected" : ""} ${isCorrect ? "correct" : ""} ${isWrong ? "wrong" : ""}`;
+                    const cls = `sq-opt ${isSelected ? "selected" : ""} ${
+                      isCorrect ? "correct" : ""
+                    } ${isWrong ? "wrong" : ""}`;
 
                     return (
-                      <button key={i} className={cls} onClick={() => select(q.id, i)} disabled={submitted}>
+                      <button
+                        key={i}
+                        className={cls}
+                        onClick={() => select(q.id, i)}
+                        disabled={submitted}
+                      >
                         <span className="sq-optBadge">{String.fromCharCode(65 + i)}</span>
                         <span>{optText}</span>
                       </button>
@@ -235,7 +276,9 @@ export default function StudentQuizPlay() {
 
         {!submitted && (
           <div className="sq-actions">
-            <button className="sq-submit" onClick={() => doSubmit(false)}>Submit Answers</button>
+            <button className="sq-submit" onClick={() => doSubmit(false)}>
+              Submit Answers
+            </button>
           </div>
         )}
       </div>

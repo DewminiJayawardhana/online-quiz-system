@@ -43,6 +43,10 @@ export default function Login() {
     );
 
     if (student) {
+      // ✅ clear old student session before setting new one
+      localStorage.removeItem("oqs_student_email");
+      localStorage.removeItem("oqs_student_name");
+
       localStorage.setItem("oqs_student_email", student.email);
       localStorage.setItem("oqs_student_name", student.name);
       nav("/student");
@@ -56,7 +60,7 @@ export default function Login() {
     <div className="lg-page">
       <div className="lg-card">
         <h1 className="lg-title">Sign In 🔐</h1>
-        <p className="lg-sub">Login as Student or Admin</p>
+        <p className="lg-sub">WELCOME !</p>
 
         {err && <div className="lg-err">{err}</div>}
 
@@ -87,7 +91,11 @@ export default function Login() {
         </form>
 
         <div className="lg-links">
-          <button className="lg-link" type="button" onClick={() => nav("/student/register")}>
+          <button
+            className="lg-link"
+            type="button"
+            onClick={() => nav("/student/register")}
+          >
             New student? Register 🚀
           </button>
           <button className="lg-link" type="button" onClick={() => nav("/")}>
