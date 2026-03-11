@@ -5,6 +5,7 @@ import "./StudentQuizPlay.css";
 
 // ✅ Email-based keys
 const getStudentEmail = () => localStorage.getItem("oqs_student_email") || "guest";
+const getStudentName = () => localStorage.getItem("oqs_student_name") || "Guest";
 
 const attemptKey = (quizId) => `oqs_${getStudentEmail()}_attempt_${quizId}`;
 const attemptsListKey = () => `oqs_${getStudentEmail()}_attempts_list`;
@@ -51,7 +52,6 @@ export default function StudentQuizPlay() {
         setQuiz(qz);
         setQuestions(qs);
 
-        // ✅ load saved attempt only for this email
         const saved = localStorage.getItem(attemptKey(quizId));
         if (saved) {
           const attempt = JSON.parse(saved);
@@ -102,8 +102,7 @@ export default function StudentQuizPlay() {
     if (!submitted && quiz && secondsLeft === 0 && questions.length > 0) {
       doSubmit(true);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [secondsLeft, submitted, quiz, questions.length]);
+  }, [secondsLeft]);
 
   const missingCount = useMemo(() => {
     if (!questions?.length) return 0;
@@ -136,7 +135,14 @@ export default function StudentQuizPlay() {
     try {
       setLoading(true);
 
-      const res = await api.post(`/api/student/quizzes/${quizId}/submit`, submissionData);
+      const studentEmail = getStudentEmail();
+      const studentName = getStudentName();
+
+      const res = await api.post(
+        `/api/student/quizzes/${quizId}/submit?email=${studentEmail}&name=${studentName}`,
+        submissionData
+      );
+
       const serverResult = res.data;
 
       const cmIdx = {};
@@ -173,12 +179,11 @@ export default function StudentQuizPlay() {
         correctMap: cmIdx,
       };
 
-      // ✅ save single attempt with email-based key
       localStorage.setItem(attemptKey(quizId), JSON.stringify(attemptData));
 
-      // ✅ save attempts list with email-based key
       const listKey = attemptsListKey();
       const prev = JSON.parse(localStorage.getItem(listKey) || "[]");
+
       localStorage.setItem(
         listKey,
         JSON.stringify([...prev.filter((a) => a.quizId !== quizId), attemptData])

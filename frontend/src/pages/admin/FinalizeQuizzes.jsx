@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { api } from "../../api/api"; // change to ../../api/axios if needed
+import { api } from "../../api/api"; 
 import "./FinalizeQuizzes.css";
 
 const CATEGORIES = [
@@ -17,7 +17,7 @@ const CATEGORIES = [
 
 export default function FinalizeQuizzes() {
   const nav = useNavigate();
-  const [tab, setTab] = useState("NEW"); // NEW | PUBLISHED
+  const [tab, setTab] = useState("NEW"); 
   const [activeCategory, setActiveCategory] = useState("Algorithms");
   const [quizzes, setQuizzes] = useState([]);
   const [err, setErr] = useState("");
@@ -39,7 +39,7 @@ export default function FinalizeQuizzes() {
 
   useEffect(() => {
     load();
-    // eslint-disable-next-line
+    
   }, [tab, activeCategory]);
 
   return (

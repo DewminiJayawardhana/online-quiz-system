@@ -1,66 +1,142 @@
-:root{
-  --bg1:#e6fbff; --bg2:#fff7ed; --bg3:#f5f3ff;
-  --card:#ffffff; --border:#bfe6ee;
-  --text:#06343A; --muted:#2F4F55;
-  --a:#00a8b5; --b:#7c3aed; --c:#22c55e;
+:root {
+  /* Blue & Professional Palette */
+  --bg-light: #eff6ff;     /* light blue (Blue 50) */
+  --bg-accent: #e0f2fe;    /* light sky (Sky 100) */
+  --primary-blue: #2563eb;  /* Royal Blue (Blue 600) */
+  --dark-blue: #1e3a8a;    /* Navy Blue (Blue 900 ) */
+  --border-color: #dbeafe; /* Border light blue */
+  --card-bg: #ffffff;
+  --text-muted: #64748b;   /* Slate gray */
 }
-.hp-page{
-  min-height:100vh;
-  background: radial-gradient(circle at 10% 10%, var(--bg3), transparent 35%),
-              radial-gradient(circle at 85% 20%, var(--bg2), transparent 45%),
-              radial-gradient(circle at 40% 90%, var(--bg1), transparent 55%),
-              linear-gradient(180deg,#f7fdff,#ffffff);
-  padding:18px 12px 30px;
+
+.hp-page {
+  min-height: 100vh;
+  /* Soft blue & white gradient background */
+  background: radial-gradient(circle at 10% 10%, #dbeafe, transparent 35%),
+              radial-gradient(circle at 85% 20%, #e0f2fe, transparent 45%),
+              linear-gradient(180deg, #f8fafc, #ffffff);
+  padding: 20px 20px 60px;
+  font-family: 'Inter', sans-serif;
 }
-.hp-header{
-  max-width:1100px;margin:0 auto;
-  display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
-  padding:14px 16px;border:1px solid var(--border);
-  border-radius:18px;background:rgba(255,255,255,0.7);
-  backdrop-filter: blur(6px);
-  box-shadow:0 16px 40px rgba(0,0,0,0.08);
+
+.hp-header {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 25px;
+  border: 1px solid #bfdbfe;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 32px rgba(37, 99, 235, 0.05);
 }
-.hp-brand{display:flex;align-items:center;gap:12px;}
-.hp-logo{font-size:32px;}
-.hp-title{font-weight:900;font-size:18px;color:var(--text);}
-.hp-sub{color:var(--muted);font-size:13px;margin-top:2px;font-weight:700;}
-.hp-actions{display:flex;gap:10px;flex-wrap:wrap;}
-.hp-btn{
-  border:none;cursor:pointer;
-  padding:10px 14px;border-radius:999px;
-  font-weight:900;color:#fff;
-  background:linear-gradient(90deg,var(--a),#3b82f6,var(--b));
+
+.hp-brand { display: flex; align-items: center; gap: 12px; }
+.hp-logo { font-size: 38px; }
+.hp-title { font-weight: 900; font-size: 22px; color: var(--dark-blue); }
+.hp-sub { color: var(--primary-blue); font-size: 14px; font-weight: 700; }
+
+.hp-btn {
+  border: none;
+  cursor: pointer;
+  padding: 12px 24px;
+  border-radius: 100px;
+  font-weight: 800;
+  color: #fff;
+  /* Blue Gradient */
+  background: linear-gradient(135deg, #3b82f6, #1e40af);
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(37, 99, 235, 0.2);
 }
-.hp-btn.ghost{
-  background:#fff;color:var(--text);
-  border:1px solid var(--border);
+
+.hp-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(37, 99, 235, 0.3);
+  filter: brightness(1.1);
 }
-.hp-btn.big{padding:12px 18px;border-radius:16px;}
-.hp-main{max-width:1100px;margin:18px auto 0;}
-.hp-hero{
-  background:rgba(255,255,255,0.8);
-  border:1px solid var(--border);
-  border-radius:22px;
-  padding:18px;
-  box-shadow:0 18px 45px rgba(0,0,0,0.08);
+
+.hp-btn.ghost {
+  background: #fff;
+  color: var(--dark-blue);
+  border: 1.5px solid var(--primary-blue);
 }
-.hp-hero h1{margin:0;color:var(--text);}
-.hp-hero p{margin:8px 0 0;color:var(--muted);font-weight:700;}
-.hp-heroBtns{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;}
-.hp-cards{
-  margin-top:14px;
-  display:grid;
-  grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:14px;
+
+.hp-main { max-width: 1200px; margin: 50px auto 0; }
+
+.hp-hero {
+  text-align: center;
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid var(--border-color);
+  border-radius: 40px;
+  padding: 60px 20px;
+  margin-bottom: 60px;
+  box-shadow: 0 20px 60px rgba(30, 58, 138, 0.03);
 }
-@media(max-width:980px){.hp-cards{grid-template-columns:repeat(2,1fr);}}
-@media(max-width:620px){.hp-cards{grid-template-columns:1fr;}}
-.hp-card{
-  background:rgba(255,255,255,0.85);
-  border:1px solid var(--border);
-  border-radius:20px;
-  padding:14px;
-  box-shadow:0 18px 45px rgba(0,0,0,0.08);
+
+.hp-hero h1 { font-size: 3.5rem; margin: 0; color: var(--dark-blue); line-height: 1.2; font-weight: 800; }
+.hp-hero p { max-width: 650px; margin: 20px auto 40px; color: var(--text-muted); font-size: 1.2rem; font-weight: 500; }
+.hp-heroBtns { display: flex; gap: 20px; justify-content: center; }
+
+.section-title {
+  text-align: center;
+  font-size: 32px;
+  color: var(--dark-blue);
+  margin-bottom: 40px;
+  font-weight: 800;
 }
-.hp-card h3{margin:0;color:var(--text);}
-.hp-card p{margin:8px 0 0;color:var(--muted);font-weight:700;}
+
+.hp-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 25px;
+}
+
+.hp-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 30px;
+  padding: 35px 25px;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.hp-card:hover {
+  transform: translateY(-12px);
+  box-shadow: 0 25px 50px rgba(37, 99, 235, 0.1);
+  border-color: var(--primary-blue);
+}
+
+.card-icon {
+  background: var(--bg-light);
+  width: 70px;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 20px;
+  font-size: 35px;
+  margin-bottom: 20px;
+}
+
+.hp-card h3 { margin: 0; color: var(--dark-blue); font-size: 22px; font-weight: 700; }
+.hp-card p { margin: 12px 0 0; color: var(--text-muted); font-size: 16px; line-height: 1.6; }
+
+.hp-footer {
+  text-align: center;
+  margin-top: 80px;
+  padding: 30px;
+  color: var(--primary-blue);
+  font-weight: 700;
+  border-top: 1px solid var(--border-color);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .hp-hero h1 { font-size: 2.5rem; }
+  .hp-heroBtns { flex-direction: column; align-items: stretch; }
+  .hp-header { padding: 10px 15px; }
+}

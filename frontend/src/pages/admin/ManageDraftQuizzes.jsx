@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { api } from "../../api/api"; // <-- if your axios instance is in api.js, change to "../../api/api"
+import { api } from "../../api/api"; 
 import "./ManageDraftQuizzes.css";
 
 const CATEGORIES = [

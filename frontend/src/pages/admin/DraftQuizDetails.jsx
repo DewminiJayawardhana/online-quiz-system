@@ -81,8 +81,7 @@ export default function DraftQuizDetails() {
     if (scheduleEditValidation.length) { setErr(scheduleEditValidation[0]); return; }
 
     try {
-      // reuse your existing scheduled PATCH endpoint (works also when DRAFT if you allow)
-      // If your backend currently restricts edit only for SCHEDULED, tell me; I'll give you a safe new endpoint.
+      
       await api.patch(`/api/quizzes/${id}`, {
         timeLimitMinutes: Number(edit.timeLimitMinutes),
         noOfQuestions: Number(edit.noOfQuestions),

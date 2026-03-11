@@ -27,13 +27,13 @@ public class DraftQuizController {
         this.questionRepo = questionRepo;
     }
 
-    // ✅ list draft quizzes by category
+    //  list draft quizzes by category
     @GetMapping
     public List<Quiz> listDraftByCategory(@RequestParam String category) {
         return quizRepo.findByStatusAndCategoryOrderByCreatedAtDesc(Quiz.Status.DRAFT, category);
     }
 
-    // ✅ get draft quiz details
+    //  get draft quiz details
     @GetMapping("/{quizId}")
     public ResponseEntity<?> getDraftQuiz(@PathVariable String quizId) {
         return quizRepo.findById(quizId)
@@ -41,7 +41,7 @@ public class DraftQuizController {
                 .orElse(ResponseEntity.status(404).body(Map.of("message", "Quiz not found")));
     }
 
-    // ✅ get questions for a quiz
+    //  get questions for a quiz
     @GetMapping("/{quizId}/questions")
     public ResponseEntity<?> getQuestions(@PathVariable String quizId) {
         if (!quizRepo.existsById(quizId)) {
@@ -50,7 +50,7 @@ public class DraftQuizController {
         return ResponseEntity.ok(questionRepo.findByQuizIdOrderByCreatedAtAsc(quizId));
     }
 
-    // ✅ add question (QUIZ_ADMIN should call from frontend)
+    // add question (QUIZ_ADMIN should call from frontend)
     @PostMapping("/{quizId}/questions")
     public ResponseEntity<?> addQuestion(@PathVariable String quizId, @RequestBody CreateQuestionRequest req) {
 
@@ -84,7 +84,7 @@ public class DraftQuizController {
         return ResponseEntity.ok(saved);
     }
 
-    // ✅ update question (QUIZ_ADMIN)
+    //  update question (QUIZ_ADMIN)
     @PatchMapping("/questions/{questionId}")
     public ResponseEntity<?> updateQuestion(@PathVariable String questionId, @RequestBody UpdateQuestionRequest req) {
 
@@ -112,7 +112,7 @@ public class DraftQuizController {
         return ResponseEntity.ok(saved);
     }
 
-    // ✅ delete question (QUIZ_ADMIN)
+    //  delete question (QUIZ_ADMIN)
     @DeleteMapping("/questions/{questionId}")
     public ResponseEntity<?> deleteQuestion(@PathVariable String questionId) {
 
@@ -133,7 +133,7 @@ public class DraftQuizController {
         return ResponseEntity.ok(Map.of("message", "Deleted"));
     }
 
-    // ✅ approve (both roles call this with type)
+    //  approve (both roles call this with type)
     @PostMapping("/{quizId}/approve")
     public ResponseEntity<?> approve(@PathVariable String quizId, @RequestBody ApprovalRequest req) {
 
@@ -161,7 +161,7 @@ public class DraftQuizController {
             return ResponseEntity.status(400).body(Map.of("message", "type must be 'content' or 'schedule'"));
         }
 
-        // ✅ Move to READY if both ticked
+        //  Move to READY if both ticked
         if (quiz.isContentCompleted() && quiz.isScheduleVerified()) {
             quiz.setStatus(Quiz.Status.READY);
         }
@@ -170,7 +170,7 @@ public class DraftQuizController {
         return ResponseEntity.ok(quizRepo.save(quiz));
     }
 
-    // ✅ list READY quizzes (Finalized section)
+    //  list READY quizzes (Finalized section)
     @GetMapping("/ready")
     public List<Quiz> listReady(@RequestParam(required = false) String category) {
         if (category != null && !category.trim().isEmpty()) {

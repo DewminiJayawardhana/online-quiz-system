@@ -23,19 +23,19 @@ public class FinalizeQuizController {
         this.questionRepo = questionRepo;
     }
 
-    // ✅ List READY (New) quizzes by category
+    //  List READY (New) quizzes by category
     @GetMapping("/new")
     public List<Quiz> listNew(@RequestParam String category) {
         return quizRepo.findByStatusAndCategoryOrderByCreatedAtDesc(Quiz.Status.READY, category);
     }
 
-    // ✅ List PUBLISHED quizzes by category
+    //  List PUBLISHED quizzes by category
     @GetMapping("/published")
     public List<Quiz> listPublished(@RequestParam String category) {
         return quizRepo.findByStatusAndCategoryOrderByCreatedAtDesc(Quiz.Status.PUBLISHED, category);
     }
 
-    // ✅ Get quiz + questions (for print + view)
+    //  Get quiz + questions (for print + view)
     @GetMapping("/{quizId}")
     public ResponseEntity<?> getFinalizeDetails(@PathVariable String quizId) {
         Quiz quiz = quizRepo.findById(quizId).orElse(null);
@@ -50,7 +50,7 @@ public class FinalizeQuizController {
         return ResponseEntity.ok(out);
     }
 
-    // ✅ Publish quiz (READY -> PUBLISHED)
+    //  Publish quiz (READY -> PUBLISHED)
     @PostMapping("/{quizId}/publish")
     public ResponseEntity<?> publish(@PathVariable String quizId) {
         Quiz quiz = quizRepo.findById(quizId).orElse(null);

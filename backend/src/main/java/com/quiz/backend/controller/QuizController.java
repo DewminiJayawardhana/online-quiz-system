@@ -22,7 +22,7 @@ public class QuizController {
         this.repo = repo;
     }
 
-    // ✅ Schedule admin creates quiz (status = SCHEDULED)
+    //  Schedule admin creates quiz (status = SCHEDULED)
     @PostMapping
     public ResponseEntity<?> create(@RequestBody CreateQuizRequest req,
                                     @RequestHeader(value = "X-Admin-Email", required = false) String adminEmail) {
@@ -50,13 +50,13 @@ public class QuizController {
         return ResponseEntity.ok(repo.save(q));
     }
 
-    // ✅ list scheduled quizzes by category (for your category buttons)
+    //  list scheduled quizzes by category (for your category buttons)
     @GetMapping("/scheduled")
     public List<Quiz> scheduledByCategory(@RequestParam String category) {
         return repo.findByStatusAndCategoryOrderByCreatedAtDesc(Quiz.Status.SCHEDULED, category);
     }
 
-    // ✅ get quiz details
+    //  get quiz details
     @GetMapping("/{id}")
     public ResponseEntity<?> getOne(@PathVariable String id) {
         return repo.findById(id)
@@ -64,7 +64,7 @@ public class QuizController {
                 .orElse(ResponseEntity.status(404).body(Map.of("message", "Quiz not found")));
     }
 
-    // ✅ schedule admin edit details (but NOT quizNo/category)
+    //  schedule admin edit details (but NOT quizNo/category)
     @PatchMapping("/{id}")
     public ResponseEntity<?> updateScheduled(@PathVariable String id, @RequestBody UpdateScheduledQuizRequest req) {
         Quiz q = repo.findById(id).orElse(null);
@@ -84,7 +84,7 @@ public class QuizController {
         return ResponseEntity.ok(repo.save(q));
     }
 
-    // ✅ quiz admin clicks "Add Questions" -> move to DRAFT
+    //  quiz admin clicks "Add Questions" -> move to DRAFT
     @PostMapping("/{id}/move-to-draft")
     public ResponseEntity<?> moveToDraft(@PathVariable String id) {
         Quiz q = repo.findById(id).orElse(null);

@@ -1,0 +1,36 @@
+.admin-page {
+    padding: 24px;
+    background: #f8fafc;
+    min-height: 100vh;
+}
+
+.profile-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+}
+
+.profile-table th, .profile-table td {
+    padding: 16px;
+    text-align: left;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.profile-table th {
+    background-color: #0f172a;
+    color: white;
+    font-weight: 600;
+}
+
+.profile-table tr:hover {
+    background-color: #f1f5f9;
+}
+
+.result-item {
+    font-size: 0.9rem;
+    padding: 2px 0;
+}

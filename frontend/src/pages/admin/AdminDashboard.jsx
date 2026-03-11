@@ -23,7 +23,9 @@ export default function AdminDashboard() {
       desc: "Create a new quiz and configure title, duration, availability window, and schedule settings.",
       action: () => navigate("/admin/quizzes/create"),
       disabled: !canCreateSchedule,
-      hint: !canCreateSchedule ? "Only Schedule Admin can access this section." : "",
+      hint: !canCreateSchedule
+        ? "Only Schedule Admin can access this section."
+        : "",
     },
     {
       key: "scheduled",
@@ -44,6 +46,13 @@ export default function AdminDashboard() {
       title: "Finalized Quizzes – Ready for Submission",
       desc: "Review completed quizzes that are fully prepared and ready for publishing or submission.",
       action: () => navigate("/admin/quizzes/finalized"),
+      disabled: false,
+    },
+    {
+      key: "students",
+      title: "View Student Profiles",
+      desc: "Check student names, emails, and their performance in each quiz.",
+      action: () => navigate("/admin/student-profiles"),
       disabled: false,
     },
   ];

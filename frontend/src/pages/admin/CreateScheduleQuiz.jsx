@@ -1,9 +1,9 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./CreateScheduleQuiz.css";
-import { api } from "../../api/api"; // ✅ ADD THIS (your axios instance)
+import { api } from "../../api/api"; 
 
-// ✅ Show next quiz number WITHOUT increasing counter
+//Show next quiz number WITHOUT increasing counter
 function generateQuizNumber() {
   const now = new Date();
   const year = now.getFullYear();
@@ -15,7 +15,7 @@ function generateQuizNumber() {
   return `OQS-${year}-${month}-${nextNumber}`;
 }
 
-// ✅ Increase counter ONLY after submit success
+//Increase counter ONLY after submit success
 function commitQuizNumber() {
   const last = localStorage.getItem("oqs_last_quiz_no");
   const nextNumber = last ? Number(last) + 1 : 1;
@@ -48,7 +48,7 @@ export default function CreateScheduleQuiz() {
 
   const [err, setErr] = useState("");
   const [ok, setOk] = useState("");
-  const [saving, setSaving] = useState(false); // ✅ prevent double submit
+  const [saving, setSaving] = useState(false); //prevent double submit
 
   useEffect(() => {
     setQuizNo(generateQuizNumber());
@@ -106,7 +106,7 @@ export default function CreateScheduleQuiz() {
       noOfQuestions: Number(noOfQuestions),
       totalMarks: Number(totalMarks),
       passingMark: Number(passingMark),
-      // ✅ send as ISO so Spring can Instant.parse(...)
+      //send as ISO so Spring can Instant.parse(...)
       startAt: new Date(startAt).toISOString(),
       endAt: new Date(endAt).toISOString(),
       status: "SCHEDULED",
@@ -115,17 +115,17 @@ export default function CreateScheduleQuiz() {
     try {
       setSaving(true);
 
-      // ✅ SAVE TO BACKEND (MongoDB)
+      //SAVE TO BACKEND (MongoDB)
       await api.post("/api/quizzes", payload, {
         headers: {
           "X-Admin-Email": localStorage.getItem("oqs_admin_email") || "",
         },
       });
 
-      // ✅ Increase quiz counter ONLY after API success
+      //Increase quiz counter ONLY after API success
       commitQuizNumber();
 
-      // ✅ Prepare next quiz number
+      //Prepare next quiz number
       setQuizNo(generateQuizNumber());
 
       setOk("Quiz scheduled successfully and added to Manage Scheduled Quizzes.");

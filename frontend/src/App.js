@@ -7,6 +7,7 @@ import Login from "./pages/Login";
 import StudentRegister from "./pages/student/StudentRegister";
 import StudentHome from "./pages/student/StudentHome";
 import StudentQuizPlay from "./pages/student/StudentQuizPlay";
+import StudentProfiles from "./pages/admin/StudentProfiles";
 
 import AdminLogin from "./pages/admin/AdminLogin";
 import AdminDashboard from "./pages/admin/AdminDashboard";
@@ -69,6 +70,7 @@ export default function App() {
             </RoleProtectedAdminRoute>
           }
         />
+        
         <Route
           path="/admin/quizzes/scheduled/:id"
           element={
@@ -96,6 +98,8 @@ export default function App() {
           }
         />
 
+        <Route path="/admin/student-profiles" element={<StudentProfiles />} />
+
         {/* Finalize Section (MAIN ADMIN only) */}
         <Route
           path="/admin/quizzes/finalized"
@@ -113,6 +117,14 @@ export default function App() {
             </RoleProtectedAdminRoute>
           }
         />
+        <Route
+  path="/admin/student-profiles"
+  element={
+    <ProtectedAdminRoute>
+      <StudentProfiles />
+    </ProtectedAdminRoute>
+  }
+/>
 
         {/* 404 */}
         <Route path="*" element={<div style={{ padding: 24 }}>404 - Page Not Found</div>} />

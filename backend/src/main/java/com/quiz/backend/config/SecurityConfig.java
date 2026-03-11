@@ -23,8 +23,8 @@ public class SecurityConfig {
           .cors(Customizer.withDefaults())
           .authorizeHttpRequests(auth -> auth
               .requestMatchers("/api/admin-auth/**").permitAll()
-              .requestMatchers("/api/student-auth/**").permitAll()     // ✅ add this
-              .requestMatchers("/api/student/quizzes/**").permitAll()  // ✅ add this
+              .requestMatchers("/api/student-auth/**").permitAll()     
+              .requestMatchers("/api/student/quizzes/**").permitAll()  
               .anyRequest().permitAll()
           );
 

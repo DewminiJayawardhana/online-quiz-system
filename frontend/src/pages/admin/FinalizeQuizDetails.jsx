@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
-import { api } from "../../api/api"; // adjust if needed
+import { api } from "../../api/api"; 
 import "./FinalizeQuizDetails.css";
 
 export default function FinalizeQuizDetails() {
@@ -27,8 +27,6 @@ export default function FinalizeQuizDetails() {
   useEffect(() => { load(); }, [id]);
 
   const printPdf = () => {
-    // ✅ Practical production way:
-    // browser print -> Save as PDF
     window.print();
   };
 
@@ -38,7 +36,7 @@ export default function FinalizeQuizDetails() {
       setPublishing(true);
       await api.post(`/api/finalize-quizzes/${id}/publish`);
       setOk("Quiz published to students successfully.");
-      // go back to list (published tab)
+      
       nav("/admin/quizzes/finalized");
     } catch (e) {
       setErr(e?.response?.data?.message || "Publish failed");
